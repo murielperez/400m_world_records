@@ -1,0 +1,41 @@
+---
+title: "Records for men's 400m"
+output: html_notebook
+---
+
+```{r}
+
+library(tidyverse)
+library(readr)
+library(lubridate)
+data <- read_csv("clean_400m_wr.csv")
+data
+```
+
+Let's do a plot of the best time as a function of date
+
+```{r}
+data %>% 
+  ggplot(aes(x = date, y = time)) + 
+  geom_point()
+```
+
+Times of Wayde van Niekerk
+
+```{r}
+data %>% 
+  filter(name == "Wayde van Niekerk") %>% 
+  ggplot(aes(x = date, y = time)) + 
+  geom_point() + 
+  geom_line()
+```
+
+```{r}
+data %>% 
+  mutate(age = as.integer(interval(date_birth, date)/years(1)) ) %>% 
+  group_by(age) %>% 
+  summarise(record = min(time)) %>% 
+  ggplot(aes(x = age, y = record)) +
+  geom_point()
+```
+
